@@ -41,7 +41,6 @@ def speechinput():
             r.adjust_for_ambient_noise(source)
             audio = r.listen(source)
         try:
-
             text_input = r.recognize_google(audio)
             print("You said: " + text_input)
         except sr.UnknownValueError:

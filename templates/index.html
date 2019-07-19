@@ -15,6 +15,7 @@
     <div class="row" style="display:inline-block; ">
         <h3>
         Weather Report Generator</h3>
+        <h6 ><a href="https://darksky.net/poweredby/" >Powered by Darksky API</a></h6>
     </div>
     </div>
 <div class="container">
@@ -22,8 +23,12 @@
         <div class="col-md-4 offset-md-4">
    <div class="weather">
        <div class="=current">
-               <label style="width: 100%;font-weight:bold;">Enter Location <input type="text" class="input-sm form-control" id="location" name="location" required> </label>
+
+               <label style="width: 100%;font-weight:bold;">Enter Location: <input type="text" class="input-sm form-control" id="location" name="location" required></label>
+<div class="error-messages" id="erro" style="display:none;color:white;font-weight:bold;"></div>
 <button class="btn btn-primary" id="weatherinfo" style="margin-left:100px;margin-right:75px;margin-top:25px;">Get Weather Info</button>
+<button class="btn btn-primary" id="speech" style="margin-left:100px;margin-right:75px;margin-top:25px;">Try Voice Input</button>
+
        </div>
         </div>
     </div>
@@ -49,7 +54,6 @@
         {
             display: flex;
             flex-flow: row wrap;
-            background-image: url("/Content/images/shared/misc/london-view.png");
             background-repeat: repeat-x;
             color: white;
             padding: 20px;
@@ -64,10 +68,31 @@
  <script>
         $(document).ready(function () {
 
+            $('#speech').click( function()
+
+            {
+            $(".error-messages").text("Aye Aye Captain! Please speak near the microphone of your device!").fadeIn();
+
+                setTimeout(function() { $("#erro").fadeOut('slow'); }, 5000);
+
+            $.ajax({
+                    type : "POST",
+                    url : "{{ url_for('speechinput') }}",
+                    success: function(data)
+                    {
+
+                        document.getElementById("location").value=data;
+                        document.getElementById("weatherinfo").click();
+                    }
+                });
+
+            });
 
             $('#weatherinfo').click( function()
             {
+
                 var data ={};
+                //var loci= document.getElementByClassName("city").innerHTML;
                 data['location'] = $('#location').val();
                 $.ajax({
                     type : "POST",
@@ -76,10 +101,18 @@
                     contentType: 'application/json;charset=UTF-8',
                     success: function(result)
                     {
-
-                        $('#result').html(result);
+                      var substring='Hey';
+                       if(result.includes('Time') || result.includes('unavailable') || result.includes('Hey'))
+                       {
+                        $(".error-messages").text(result).fadeIn();
+                        }
+                       else
+                       {
+                         $('#result').html(result);
+                        }
                     }
                 });
+
             });
         });
 

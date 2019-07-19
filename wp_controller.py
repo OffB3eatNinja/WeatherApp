@@ -1,12 +1,19 @@
 from fp_model import WeatherReport
 from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
+from geopy.exc import GeocoderServiceError
 import requests
 
 API_KEY="89bfd529e419ae907537751129425e41"
 class Weather_Controller:
     def getLocation(self, location_info):
-        location = Nominatim().geocode(location_info, language='en_US')
-        return location
+        try:
+            location = Nominatim().geocode(location_info, language='en_US',timeout=2000)
+            return location
+        except GeocoderTimedOut:
+            return "Time Out. Go get a life. Cut me slack,jeez!"
+        except GeocoderServiceError:
+            return "Service unavailable. Just like your brain cells. "
 
     def getWeatherInfo(self,data,location):
         latitude = str(location.latitude)

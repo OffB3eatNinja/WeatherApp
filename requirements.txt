@@ -4,4 +4,3 @@ Flask_Cors==3.0.6
 requests==2.20.0
 geopy==1.20.0
 gunicorn==19.9.0
-PyAudio==0.2.11

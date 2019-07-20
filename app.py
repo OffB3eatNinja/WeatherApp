@@ -19,7 +19,7 @@ def weatherinfo():
 
         geo_location = weather_info.getLocation(input_location)
         if geo_location == None:
-            location_info = "Hey there! You don't seem like an earthling. Is it a hot spot on Mars?"
+            location_info = "Hey there!! You don't seem like an earthling. Is it a hot spot on Mars?"
             return location_info
         elif type(geo_location)==str:
             return geo_location
